@@ -134,7 +134,7 @@ func (ad *authDecV10) Open(dst, src []byte) error {
 	if header.Version() != Version10 {
 		return errUnsupportedVersion
 	}
-	if header.Cipher() > SM4_128_CCM {
+	if header.Cipher() > SM4_128_GCM {
 		return errUnsupportedCipher
 	}
 	aeadCipher := ad.Ciphers[header.Cipher()]
@@ -215,7 +215,7 @@ func newAuthDecV20(cfg *Config) (authDecV20, error) {
 	var err error
 
 	for _, v := range cfg.CipherSuites {
-		if v == SM4_128_CCM {
+		if v == SM4_128_GCM {
 			aeadCipher, err = supportedCiphers[v](cfg.Key[:16])
 		} else {
 			aeadCipher, err = supportedCiphers[v](cfg.Key)
@@ -250,7 +250,7 @@ func (ad *authDecV20) Open(dst, src []byte) error {
 	if header.Version() != Version20 {
 		return errUnsupportedVersion
 	}
-	if c := header.Cipher(); c > SM4_128_CCM || ad.Ciphers[c] == nil || c != ad.refHeader.Cipher() {
+	if c := header.Cipher(); c > SM4_128_GCM || ad.Ciphers[c] == nil || c != ad.refHeader.Cipher() {
 		return errUnsupportedCipher
 	}
 	if headerSize+header.Length()+tagSize != len(src) {

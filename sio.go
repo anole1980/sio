@@ -42,7 +42,7 @@ const (
 	AES_256_GCM byte = iota
 	// CHACHA20_POLY1305 specifies the cipher suite ChaCha20Poly1305 with 256 bit keys.
 	CHACHA20_POLY1305
-	SM4_128_CCM
+	SM4_128_GCM
 )
 
 // supportsAES indicates whether the CPU provides hardware support for AES-GCM.
@@ -80,7 +80,7 @@ var newSm4Gcm = func(key []byte) (cipher.AEAD, error) {
 var supportedCiphers = [...]func([]byte) (cipher.AEAD, error){
 	AES_256_GCM:       newAesGcm,
 	CHACHA20_POLY1305: chacha20poly1305.New,
-	SM4_128_CCM:       newSm4Gcm,
+	SM4_128_GCM:       newSm4Gcm,
 }
 
 var (
@@ -315,9 +315,9 @@ func DecryptWriter(dst io.Writer, config Config) (io.WriteCloser, error) {
 
 func defaultCipherSuites() []byte {
 	if supportsAES {
-		return []byte{SM4_128_CCM, AES_256_GCM, CHACHA20_POLY1305}
+		return []byte{SM4_128_GCM, AES_256_GCM, CHACHA20_POLY1305}
 	}
-	return []byte{SM4_128_CCM, CHACHA20_POLY1305, AES_256_GCM}
+	return []byte{SM4_128_GCM, CHACHA20_POLY1305, AES_256_GCM}
 }
 
 func setConfigDefaults(config *Config) error {

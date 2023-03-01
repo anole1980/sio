@@ -157,7 +157,7 @@ func cipherSuites() []byte {
 	case "C20P1305":
 		return []byte{sio.CHACHA20_POLY1305}
 	case "SM4":
-		return []byte{sio.SM4_128_CCM}
+		return []byte{sio.SM4_128_GCM}
 	}
 }
 
